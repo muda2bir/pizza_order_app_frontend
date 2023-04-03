@@ -36,6 +36,7 @@ export default function Login() {
       }
     },
   });
+
   return (
     <form className="bg-white rounded mb-4" onSubmit={formik.handleSubmit}>
       <div className="mb-4">
@@ -48,7 +49,7 @@ export default function Login() {
         <input
           className={`shadow appearance-none border ${
             formik.touched.email && formik.errors.email ? "border-red-500" : ""
-          } rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+          } rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id="email"
           type="email"
           placeholder="name@mail.com"
@@ -71,7 +72,7 @@ export default function Login() {
             formik.touched.password && formik.errors.password
               ? "border-red-500"
               : ""
-          } rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
+          } rounded-xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
           id="password"
           type="password"
           placeholder="******************"
