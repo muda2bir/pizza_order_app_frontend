@@ -5,7 +5,7 @@ import profileIcon from "../assets/profile.svg";
 
 export default function Navbar() {
   return (
-    <nav className="flex mb-3 items-center justify-between overflow-hidden py-5 font-primary">
+    <nav className="flex mb-3 items-center justify-between overflow-hidden py-5 font-primary relative">
       <Link to="/">
         <img
           src={SiteLogo}
@@ -28,11 +28,24 @@ export default function Navbar() {
       </ul>
 
       <div id="profile_cart_block" className="flex items-center gap-4">
-        <img
-          src={profileIcon}
-          alt="Profile"
-          className="h-10 cursor-pointer lg:h-14 xl:h-9"
-        />
+        <Link to="/login">
+          <img
+            src={profileIcon}
+            alt="Profile"
+            className="h-10 cursor-pointer lg:h-14 xl:h-9"
+          />
+        </Link>
+      </div>
+      <div
+        id="main_profile_container"
+        className="absolute right-0 top-full bg-red-200"
+      >
+        <div id="logout_state">
+          <button>Login</button>
+          <p>
+            Don&apos;t have an account? <Link to="/register">Register</Link>
+          </p>
+        </div>
       </div>
     </nav>
   );

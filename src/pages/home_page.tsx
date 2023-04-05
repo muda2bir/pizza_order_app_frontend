@@ -1,10 +1,36 @@
 import pizzaHeroImage from "../assets/pizza_hero_image.png";
 import AppLayout from "../components/AppLayout";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+type IngredientType = {
+  _id: number;
+  name: string;
+};
 
 export default function HomePage() {
-  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [ingredients, setIngredients] = useState<IngredientType[]>([]);
+
+  async function getAllIngredients() {
+    let response = await axios({
+      method: "get",
+      withCredentials: true,
+      url: `${import.meta.env.VITE_SERVER_URL}/api/v1/ingredients`,
+    });
+    let { data } = response;
+    if (data.status === "ok") {
+      setIngredients(data.ingredients);
+    } else {
+      toast.error("Something went wrong!");
+      return;
+    }
+  }
+
+  useEffect(() => {
+    getAllIngredients();
+  }, []);
 
   return (
     <>
@@ -25,29 +51,39 @@ export default function HomePage() {
             <div id="ingredients_container" className="mb-10">
               <h1 className="my-8 text-3xl font-primary">
                 Choose{" "}
-                <span className="text-[#422C1D] font-bold">Ingredients</span>
+                <span className="text-[#422C1D] font-bold">
+                  Ingredients & Toppings
+                </span>
               </h1>
 
-              <div id="inputs_container" className="flex flex-wrap">
-                <div
-                  id="input_box_container"
-                  //   border-orange-500 border-4 font-bold
-                  className="border-4 rounded-full flex items-center justify-center"
-                >
-                  <input
-                    type="checkbox"
-                    name="ingredient"
-                    value="carrot"
-                    id="carrot"
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="carrot"
-                    className="text-lg font-primary w-full h-full block cursor-pointer px-6 py-2"
-                  >
-                    Carrot
-                  </label>
-                </div>
+              <div id="inputs_container" className="flex flex-wrap gap-4">
+                {ingredients.length > 0 &&
+                  ingredients.map(
+                    (ingredient: { _id: number; name: string }) => {
+                      return (
+                        <div
+                          id="input_box_container"
+                          //   border-orange-500 border-4 font-bold
+                          className="border-4 rounded-full flex items-center justify-center"
+                          key={ingredient._id}
+                        >
+                          <input
+                            type="checkbox"
+                            name="ingredient"
+                            value={ingredient.name}
+                            id={ingredient.name}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor={ingredient.name}
+                            className="text-md font-primary w-full h-full block cursor-pointer px-4 py-2"
+                          >
+                            {ingredient.name}
+                          </label>
+                        </div>
+                      );
+                    }
+                  )}
               </div>
             </div>
           </div>
