@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import pizzaHeroImage from "../assets/pizza_hero_image.png";
+import AppLayout from "../components/AppLayout";
+import Navbar from "../components/Navbar";
+import { useState } from "react";
 
 export default function HomePage() {
+  const [ingredients, setIngredients] = useState<string[]>([]);
+
   return (
     <>
-      <div className="container mx-auto">
-        <Navbar />
+      <AppLayout>
         <h1 className="mb-12 text-4xl font-primary text-center">
           Get some delicious{" "}
           <span className="text-[#422C1D] font-bold">pizza!</span>
@@ -50,7 +52,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
+      </AppLayout>
     </>
   );
 }
