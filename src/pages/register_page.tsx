@@ -9,7 +9,7 @@ export default function RegisterPage() {
       <Register />
       <p className="text-center font-primary text-[#828282] mb-6 2xl:text-sm">
         Already have an account?{" "}
-        <Link to="/login" className="text-[#2F80ED]">
+        <Link to="/login" className="text-[#FC823D]">
           Login
         </Link>
       </p>

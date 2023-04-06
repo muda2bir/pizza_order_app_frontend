@@ -32,8 +32,8 @@ export default function Register() {
           toast.error(data.message);
           return;
         }
-        toast.success(data.message);
         navigate("/login");
+        toast.success(data.message);
       } catch (err) {
         toast.error("Something went wrong!");
       }
@@ -126,7 +126,7 @@ export default function Register() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
+          className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
             formik.isSubmitting ? "cursor-not-allowed" : ""
           }`}
           type="submit"

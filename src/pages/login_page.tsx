@@ -11,7 +11,7 @@ export default function LoginPage() {
       <Login />
       <p className="text-center font-primary text-[#828282] mb-6 2xl:text-sm">
         Don&apos;t have an account yet?{" "}
-        <Link to="/register" className="text-[#2F80ED]">
+        <Link to="/register" className="text-[#FC823D]">
           Register
         </Link>
       </p>

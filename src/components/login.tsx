@@ -1,12 +1,16 @@
-import { useFormik } from "formik";
-import { loginValidation } from "../validation/loginValidation";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "../app/hooks";
 import btnLoader from "../assets/button_loader.svg";
+import { setUserAuth } from "../features/user/authSlice";
+import { setUser } from "../features/user/userSlice";
+import { loginValidation } from "../validation/loginValidation";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -29,8 +33,20 @@ export default function Login() {
           toast.error(data.message);
           return;
         }
-        toast.success(data.message);
         navigate("/");
+        toast.success(data.message);
+        dispatch(
+          setUserAuth({
+            authenticated: true,
+          })
+        ); // Authenticated the user in the state
+        dispatch(
+          setUser({
+            _id: data.user._id,
+            name: data.user.full_name,
+            email: data.user.email,
+          }) // user set on the state
+        );
       } catch (error) {
         toast.error("Something went wrong!");
       }
@@ -87,7 +103,7 @@ export default function Login() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
+          className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
             formik.isSubmitting ? "cursor-not-allowed" : ""
           }`}
           type="submit"

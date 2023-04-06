@@ -28,7 +28,7 @@ export default function Navbar() {
       </ul>
 
       <div id="profile_cart_block" className="flex items-center gap-4">
-        <Link to="/login">
+        <Link to="/profile">
           <img
             src={profileIcon}
             alt="Profile"
