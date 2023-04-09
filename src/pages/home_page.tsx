@@ -2,12 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import btnLoader from "../assets/button_loader.svg";
 import pizzaHeroImage from "../assets/pizza_hero_image.png";
 import AppLayout from "../components/AppLayout";
 import { setUserAuth } from "../features/user/authSlice";
+import { setCart } from "../features/user/cartSlice";
 import { setUser } from "../features/user/userSlice";
-import btnLoader from "../assets/button_loader.svg";
 
 type IngredientType = {
   _id: number;
@@ -18,8 +19,12 @@ type IngredientType = {
 export default function HomePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const userAuthenticated = useAppSelector(
+    (state) => state.auth.value.authenticated
+  );
+  const cart = useAppSelector((state) => state.cart.value);
+  const { _id: customer_id } = useAppSelector((state) => state.user.value);
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);
-  const [selectedIngredients, setSelectedIngredients] = useState<number[]>([]);
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
 
   async function getAllIngredients() {
@@ -44,13 +49,9 @@ export default function HomePage() {
             email: data.user.email,
           })
         );
-      } else {
-        navigate("/login"); // Navigating the user to the login page if not authenticated;
-        toast.error("Please Login!");
-        return;
       }
+      setIngredients(data.ingredients);
     } catch (err) {
-      navigate("/login");
       toast.error("Something went wrong!");
     }
   }
@@ -59,13 +60,67 @@ export default function HomePage() {
     getAllIngredients();
   }, []);
 
+  async function addPizzaToCart() {
+    if (cart.pizza_name === "") {
+      toast.error("Please Enter the Pizza Name");
+      return;
+    }
+    if (cart.selectedIngredients.length < 3) {
+      toast.error("Please select at least 3 ingredients!");
+      return;
+    }
+    // * : reset the pizza name field.
+    if (!userAuthenticated) {
+      navigate("/login");
+      return;
+    } // if the user is not authenticated then navigate to the login page
+    // *: Add the cart item to the database here
+    try {
+      let response = await axios({
+        method: "post",
+        url: `${import.meta.env.VITE_SERVER_URL}/api/v1/cart/push_to_cart`,
+        withCredentials: true,
+        data: {
+          pizza_name: cart.pizza_name,
+          customer_id: customer_id,
+          ingredients: cart.selectedIngredients,
+        },
+      });
+      let { data } = response;
+      if (data.status === "error") {
+        toast.error("Failed to add item to cart!");
+        return;
+      }
+      toast.success("Pizza Added to Cart Successfully!");
+      dispatch(setCart({ ...cart, pizza_name: "" }));
+    } catch (err) {
+      toast.error("Failed to add item to cart!");
+      return;
+    }
+  }
+
+  function capitalizeFirstLetter(word: string) {
+    if (!word) return word;
+    return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  } // this function will capitalize the first letter of all the ingredients
+
   function goToSelectedIngredients(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, checked } = event.target;
-    if (checked)
-      setSelectedIngredients([...selectedIngredients, Number(value)]);
-    else
-      setSelectedIngredients(
-        selectedIngredients.filter((e) => e !== Number(value))
+    if (checked) {
+      dispatch(
+        setCart({
+          ...cart,
+          selectedIngredients: [...cart.selectedIngredients, value],
+        })
+      );
+    } else
+      dispatch(
+        setCart({
+          ...cart,
+          selectedIngredients: cart.selectedIngredients.filter(
+            (e) => e != value
+          ),
+        })
       );
   }
 
@@ -75,86 +130,93 @@ export default function HomePage() {
   return (
     <>
       <AppLayout>
-        <h1 className="mb-12 text-4xl font-primary text-center">
-          Get some delicious{" "}
-          <span className="text-[#422C1D] font-bold">pizza!</span>
-        </h1>
-        <div id="hero_container" className="flex flex-col items-start gap-12">
-          <img src={pizzaHeroImage} alt="Pizza" />
-          <div
-            id="ingredient_toppings_container"
-            className="flex-col w-full mb-12"
-          >
-            <input
-              className="appearance-none border-b-2 border-[#422C1D] w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-primary text-xl font-bold"
-              type="text"
-              placeholder="Enter Pizza Name....."
-            />
-
-            <div id="ingredients_container" className="mb-10">
-              <h1 className="my-8 text-3xl font-primary">
-                Choose{" "}
-                <span className="text-[#422C1D] font-bold">
-                  Ingredients & Toppings
-                </span>
-              </h1>
-
-              <div id="inputs_container" className="flex flex-col gap-4">
-                {ingredients.length > 0 &&
-                  ingredients.map(
-                    (ingredient: {
-                      _id: number;
-                      name: string;
-                      price: number;
-                    }) => {
-                      return (
-                        <div
-                          className="mb-[0.125rem] min-h-[1.5rem] pl-[1.5rem] flex justify-between"
-                          id="input_box_container"
-                          key={ingredient._id}
-                        >
-                          <div id="input_label_container" className="flex-1">
-                            <input
-                              className={inputStyle}
-                              type="checkbox"
-                              value={ingredient._id}
-                              id={`$${ingredient._id}`}
-                              onChange={(e) => goToSelectedIngredients(e)}
-                            />
-                            <label
-                              className="inline-block text-lg pl-[0.15rem] hover:cursor-pointer font-primary"
-                              htmlFor={`$${ingredient._id}`}
-                            >
-                              {ingredient.name}
-                            </label>
-                          </div>
-
-                          <div id="price_container">
-                            <span className="font-primary font-bold">{`₹${ingredient.price}`}</span>
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
-              </div>
-            </div>
-            <button
-              className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline font-primary ${
-                addingToCart ? "cursor-not-allowed" : ""
-              } `}
-              disabled={addingToCart}
+        <>
+          <h1 className="mb-12 text-4xl font-primary text-center">
+            Get some delicious{" "}
+            <span className="text-[#422C1D] font-bold">pizza!</span>
+          </h1>
+          <div id="hero_container" className="flex flex-col items-start gap-12">
+            <img src={pizzaHeroImage} alt="Pizza" />
+            <div
+              id="ingredient_toppings_container"
+              className="flex-col w-full mb-12"
             >
-              {addingToCart ? (
-                <div className="flex items-center gap-2 justify-center">
-                  <img src={btnLoader} alt="loading.." className="h-6" />{" "}
-                  Loading...
+              <input
+                className="appearance-none border-b-2 border-[#422C1D] w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-primary text-xl font-bold"
+                type="text"
+                placeholder="Enter Pizza Name....."
+                value={cart.pizza_name}
+                onChange={(e) =>
+                  dispatch(setCart({ ...cart, pizza_name: e.target.value }))
+                }
+              />
+
+              <div id="ingredients_container" className="mb-10">
+                <h1 className="my-8 text-3xl font-primary">
+                  Choose{" "}
+                  <span className="text-[#422C1D] font-bold">
+                    Ingredients & Toppings
+                  </span>
+                </h1>
+
+                <div id="inputs_container" className="flex flex-col gap-4">
+                  {ingredients.length > 0 &&
+                    ingredients.map(
+                      (ingredient: {
+                        _id: number;
+                        name: string;
+                        price: number;
+                      }) => {
+                        return (
+                          <div
+                            className="mb-[0.125rem] min-h-[1.5rem] pl-[1.5rem] flex justify-between"
+                            id="input_box_container"
+                            key={ingredient._id}
+                          >
+                            <div id="input_label_container" className="flex-1">
+                              <input
+                                className={inputStyle}
+                                type="checkbox"
+                                value={ingredient.name}
+                                id={`$${ingredient._id}`}
+                                onChange={(e) => goToSelectedIngredients(e)}
+                              />
+                              <label
+                                className="inline-block text-lg pl-[0.15rem] hover:cursor-pointer font-primary"
+                                htmlFor={`$${ingredient._id}`}
+                              >
+                                {`${capitalizeFirstLetter(ingredient.name)}`}
+                              </label>
+                            </div>
+
+                            <div id="price_container">
+                              <span className="font-primary font-bold">{`₹${ingredient.price}`}</span>
+                            </div>
+                          </div>
+                        );
+                      }
+                    )}
                 </div>
-              ) : (
-                "Add Pizza to Cart"
-              )}
-            </button>
+              </div>
+              <button
+                className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline font-primary ${
+                  addingToCart ? "cursor-not-allowed" : ""
+                } `}
+                disabled={addingToCart}
+                onClick={addPizzaToCart}
+              >
+                {addingToCart ? (
+                  <div className="flex items-center gap-2 justify-center">
+                    <img src={btnLoader} alt="loading.." className="h-6" />{" "}
+                    Loading...
+                  </div>
+                ) : (
+                  "Add Pizza to Cart"
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       </AppLayout>
     </>
   );

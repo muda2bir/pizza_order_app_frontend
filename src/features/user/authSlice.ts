@@ -16,7 +16,7 @@ const initialState: UserAuthType = {
 };
 
 export const authSlice = createSlice({
-  name: "user",
+  name: "auth",
   initialState,
   reducers: {
     setUserAuth: (state, action: PayloadAction<UserAuth>) => {

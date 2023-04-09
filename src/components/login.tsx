@@ -2,15 +2,18 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import btnLoader from "../assets/button_loader.svg";
 import { setUserAuth } from "../features/user/authSlice";
+import { setCart } from "../features/user/cartSlice";
 import { setUser } from "../features/user/userSlice";
 import { loginValidation } from "../validation/loginValidation";
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart.value);
+  const currentUser = useAppSelector((state) => state.user.value);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -33,8 +36,6 @@ export default function Login() {
           toast.error(data.message);
           return;
         }
-        navigate("/");
-        toast.success(data.message);
         dispatch(
           setUserAuth({
             authenticated: true,
@@ -46,12 +47,38 @@ export default function Login() {
             name: data.user.full_name,
             email: data.user.email,
           }) // user set on the state
-        );
+        ); // saving the user in the state
+        handleAddToCart(data.message, data.user._id); // add the item to cart after successful login
+        return; // and the no need to do any thing just return;
       } catch (error) {
         toast.error("Something went wrong!");
       }
     },
   });
+
+  async function handleAddToCart(successMessage: string, customer_id: string) {
+    toast.success(successMessage);
+    navigate("/");
+    if (cart.selectedIngredients.length > 0) {
+      let response = await axios({
+        method: "post",
+        url: `${import.meta.env.VITE_SERVER_URL}/api/v1/cart/push_to_cart`,
+        withCredentials: true,
+        data: {
+          pizza_name: cart.pizza_name,
+          customer_id: customer_id,
+          ingredients: cart.selectedIngredients,
+        },
+      });
+      let { data } = response;
+      if (data.status === "error") {
+        toast.error("Failed to add item to cart!");
+        return;
+      }
+      toast.success("Pizza Added to Cart Successfully!");
+      dispatch(setCart({ pizza_name: "", selectedIngredients: [] })); // clean the state if everything goes well
+    }
+  }
 
   return (
     <form className="bg-white rounded mb-4" onSubmit={formik.handleSubmit}>

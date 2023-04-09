@@ -1,7 +1,7 @@
 import Navbar from "./Navbar";
 
 type AppLayoutProps = {
-  children: React.ReactElement[];
+  children: React.ReactElement;
 };
 
 export default function AppLayout({ children }: AppLayoutProps) {

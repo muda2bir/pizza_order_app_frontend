@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import LoginRegisterLayout from "../components/LoginRegisterLayout";
-import Login from "../components/login";
+import Login from "../components/Login";
 
 export default function LoginPage() {
   return (
