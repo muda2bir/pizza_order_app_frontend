@@ -2,10 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import AppLayout from "../components/AppLayout";
-import pizzaImage from "../assets/pizza_hero_image.png";
-import btnLoader from "../assets/button_loader.svg";
 import { useAppSelector } from "../app/hooks";
+import pizzaImage from "../assets/pizza_hero_image.png";
+import AppLayout from "../components/AppLayout";
+import Button from "../components/Button";
 
 export interface CartObj {
   pizza_name: string;
@@ -101,13 +101,15 @@ export default function CartPage() {
   return (
     <AppLayout>
       <>
-        <h1 className="mb-12 text-4xl font-primary text-center">Your Cart</h1>
-        <ul>
+        <h1 className="mb-12 md:mb-14 text-4xl md:text-5xl font-primary text-center">
+          Your Cart
+        </h1>
+        <ul className="mb-8">
           {cart.length > 0 ? (
             cart.map((item: CartObj) => {
               return (
                 <li className="flex py-6 font-primary" key={item.cart_id}>
-                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
+                  <div className="h-24 w-24 md:h-32 md:w-32 flex-shrink-0 overflow-hidden rounded-md">
                     <img
                       src={pizzaImage}
                       alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch."
@@ -117,14 +119,16 @@ export default function CartPage() {
 
                   <div className="ml-4 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between text-sm font-medium text-gray-900">
+                      <div className="flex justify-between text-sm md:text-xl font-medium text-gray-900">
                         <h3>
                           <a href="#">{item.pizza_name}</a>
                         </h3>
-                        <p className="ml-4">₹{item.total_price}</p>
+                        <p className="ml-4 md:text-lg">
+                          ₹{item.total_price.toFixed(2)}
+                        </p>
                       </div>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {item.ingredients.join(", ").slice(0, 35)}....
+                      <p className="mt-1 text-sm md:text-lg text-gray-500">
+                        {item.ingredients.join(", ").slice(0, 40)}....
                       </p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
@@ -133,7 +137,7 @@ export default function CartPage() {
                       <div className="flex">
                         <button
                           type="button"
-                          className="font-medium text-[#FC5D3D] hover:text-[#FC823D]"
+                          className="font-medium md:text-lg text-[#FC5D3D] hover:text-[#FC823D]"
                           onClick={() => removeItemFromTheCart(item.cart_id)}
                         >
                           Remove
@@ -149,22 +153,11 @@ export default function CartPage() {
           )}
         </ul>
         {cart.length > 0 ? (
-          <button
-            className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline mt-6 font-primary ${
-              placingOrder ? "cursor-not-allowed" : ""
-            } `}
-            disabled={placingOrder}
-            onClick={placeOrder}
-          >
-            {placingOrder ? (
-              <div className="flex items-center gap-2 justify-center">
-                <img src={btnLoader} alt="loading.." className="h-6" />{" "}
-                Loading...
-              </div>
-            ) : (
-              "Place Order"
-            )}
-          </button>
+          <Button
+            loadingState={placingOrder}
+            clickFunction={placeOrder}
+            btnText="Place Order"
+          />
         ) : null}
       </>
     </AppLayout>

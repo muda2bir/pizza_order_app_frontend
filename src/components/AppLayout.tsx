@@ -6,7 +6,7 @@ type AppLayoutProps = {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto md:px-6 lg:px-16">
       <Navbar />
       {children}
     </div>

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import btnLoader from "../assets/button_loader.svg";
 import pizzaHeroImage from "../assets/pizza_hero_image.png";
 import AppLayout from "../components/AppLayout";
+import Button from "../components/Button";
 import { setUserAuth } from "../features/user/authSlice";
 import { setCart } from "../features/user/cartSlice";
 import { setUser } from "../features/user/userSlice";
@@ -152,24 +152,27 @@ export default function HomePage() {
   }
 
   const inputStyle =
-    "relative float-left mt-[0.15rem] mr-[6px] -ml-[1.5rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary";
+    "relative float-left mt-[0.15rem] mr-[6px] -ml-[1.5rem] h-[1.125rem] w-[1.125rem] md:h-[1.5rem] md:w-[1.5rem] lg:w-[2rem] xl:w-6 xl:h-6 lg:h-[2rem] md:mr-[20px] appearance-none lg:mr-[30px] rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary";
 
   return (
     <>
       <AppLayout>
         <>
-          <h1 className="mb-12 text-4xl font-primary text-center">
+          <h1 className="mb-12 text-4xl font-primary text-center md:text-6xl md:leading-tight md:mb-16 lg:text-7xl lg:mb-20">
             Get some delicious{" "}
             <span className="text-[#422C1D] font-bold">pizza!</span>
           </h1>
-          <div id="hero_container" className="flex flex-col items-start gap-12">
+          <div
+            id="hero_container"
+            className="flex flex-col xl:flex-row items-center gap-12 md:gap-16 lg:gap-20"
+          >
             <img src={pizzaHeroImage} alt="Pizza" />
             <div
               id="ingredient_toppings_container"
               className="flex-col w-full mb-12"
             >
               <input
-                className="appearance-none border-b-2 border-[#422C1D] w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-primary text-xl font-bold"
+                className="appearance-none border-b-2 border-[#422C1D] w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-primary text-xl font-bold md:text-4xl xl:text-2xl"
                 type="text"
                 placeholder="Enter Pizza Name....."
                 value={cart.pizza_name}
@@ -179,14 +182,17 @@ export default function HomePage() {
               />
 
               <div id="ingredients_container" className="mb-10">
-                <h1 className="my-8 text-3xl font-primary">
+                <h1 className="my-8 md:my-12 text-3xl md:text-4xl font-primary lg:text-5xl lg:my-16 xl:text-2xl xl:my-8">
                   Choose{" "}
                   <span className="text-[#422C1D] font-bold">
                     Ingredients & Toppings
                   </span>
                 </h1>
 
-                <div id="inputs_container" className="flex flex-col gap-4">
+                <div
+                  id="inputs_container"
+                  className="flex flex-col gap-4 lg:gap-8 xl:gap-4"
+                >
                   {ingredients.length > 0 &&
                     ingredients.map(
                       (ingredient: {
@@ -197,7 +203,7 @@ export default function HomePage() {
                         return (
                           <div
                             className="mb-[0.125rem] min-h-[1.5rem] pl-[1.5rem] flex justify-between"
-                            id="input_box_container"
+                            id={`${ingredient._id}`}
                             key={ingredient._id}
                           >
                             <div id="input_label_container" className="flex-1">
@@ -211,7 +217,7 @@ export default function HomePage() {
                                 }
                               />
                               <label
-                                className="inline-block text-lg pl-[0.15rem] hover:cursor-pointer font-primary"
+                                className="inline-block text-lg md:text-2xl lg:text-3xl pl-[0.15rem] hover:cursor-pointer font-primary xl:text-xl"
                                 htmlFor={`$${ingredient._id}`}
                               >
                                 {`${capitalizeFirstLetter(ingredient.name)}`}
@@ -219,7 +225,7 @@ export default function HomePage() {
                             </div>
 
                             <div id="price_container">
-                              <span className="font-primary font-bold">{`₹${ingredient.price}`}</span>
+                              <span className="font-primary md:text-xl font-bold lg:text-2xl xl:text-xl">{`₹${ingredient.price}`}</span>
                             </div>
                           </div>
                         );
@@ -227,22 +233,11 @@ export default function HomePage() {
                     )}
                 </div>
               </div>
-              <button
-                className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline font-primary ${
-                  addingToCart ? "cursor-not-allowed" : ""
-                } `}
-                disabled={addingToCart}
-                onClick={addPizzaToCart}
-              >
-                {addingToCart ? (
-                  <div className="flex items-center gap-2 justify-center">
-                    <img src={btnLoader} alt="loading.." className="h-6" />{" "}
-                    Loading...
-                  </div>
-                ) : (
-                  "Add Pizza to Cart"
-                )}
-              </button>
+              <Button
+                loadingState={addingToCart}
+                clickFunction={addPizzaToCart}
+                btnText="Add Pizza to Cart"
+              />
             </div>
           </div>
         </>
