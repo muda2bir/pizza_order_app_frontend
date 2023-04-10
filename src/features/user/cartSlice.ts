@@ -3,7 +3,10 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface CartObj {
   pizza_name: string;
-  selectedIngredients: string[];
+  selectedIngredients: {
+    name: string;
+    price: number;
+  }[];
 }
 
 export interface CartType {

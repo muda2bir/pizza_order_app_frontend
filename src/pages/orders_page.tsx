@@ -11,6 +11,7 @@ export interface OrderObj {
   order_id: string;
   customer_id: string;
   ingredients: number[];
+  total_price: number;
   orderedAt: Date;
   updatedAt: Date;
 }
@@ -91,11 +92,11 @@ export default function OrdersPage() {
 
                   <div className="ml-4 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+                      <div className="flex justify-between text-sm font-medium text-gray-900">
                         <h3>
                           <a href="#">{item.pizza_name}</a>
                         </h3>
-                        <p className="ml-4">₹45.66</p>
+                        <p className="ml-4">₹{item.total_price}</p>
                       </div>
                       <p className="mt-1 text-sm text-gray-500">
                         {item.ingredients.join(", ").slice(0, 47)}....

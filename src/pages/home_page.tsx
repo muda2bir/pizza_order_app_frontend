@@ -75,6 +75,23 @@ export default function HomePage() {
       return;
     } // if the user is not authenticated then navigate to the login page
     // *: Add the cart item to the database here
+
+    function getSelectedIngredientsArray() {
+      let ingredientsArr = [];
+      for (let i = 0; i < cart.selectedIngredients.length; i++) {
+        ingredientsArr.push(cart.selectedIngredients[i].name);
+      }
+      return ingredientsArr;
+    }
+
+    let sum = 0;
+    function getTotalPriceOfSelectedArr() {
+      for (let i = 0; i < cart.selectedIngredients.length; i++) {
+        sum += cart.selectedIngredients[i].price;
+      }
+      return sum;
+    }
+
     try {
       let response = await axios({
         method: "post",
@@ -83,7 +100,8 @@ export default function HomePage() {
         data: {
           pizza_name: cart.pizza_name,
           customer_id: customer_id,
-          ingredients: cart.selectedIngredients,
+          ingredients: getSelectedIngredientsArray(),
+          total_price: getTotalPriceOfSelectedArr(),
         },
       });
       let { data } = response;
@@ -92,7 +110,7 @@ export default function HomePage() {
         return;
       }
       toast.success("Pizza Added to Cart Successfully!");
-      dispatch(setCart({ ...cart, pizza_name: "" }));
+      dispatch(setCart({ pizza_name: "", selectedIngredients: [] }));
     } catch (err) {
       toast.error("Failed to add item to cart!");
       return;
@@ -104,13 +122,22 @@ export default function HomePage() {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
   } // this function will capitalize the first letter of all the ingredients
 
-  function goToSelectedIngredients(event: React.ChangeEvent<HTMLInputElement>) {
+  function goToSelectedIngredients(
+    event: React.ChangeEvent<HTMLInputElement>,
+    price: number
+  ) {
     const { value, checked } = event.target;
     if (checked) {
       dispatch(
         setCart({
           ...cart,
-          selectedIngredients: [...cart.selectedIngredients, value],
+          selectedIngredients: [
+            ...cart.selectedIngredients,
+            {
+              name: value,
+              price: price,
+            },
+          ],
         })
       );
     } else
@@ -118,7 +145,7 @@ export default function HomePage() {
         setCart({
           ...cart,
           selectedIngredients: cart.selectedIngredients.filter(
-            (e) => e != value
+            (e) => e.name != value
           ),
         })
       );
@@ -179,7 +206,9 @@ export default function HomePage() {
                                 type="checkbox"
                                 value={ingredient.name}
                                 id={`$${ingredient._id}`}
-                                onChange={(e) => goToSelectedIngredients(e)}
+                                onChange={(e) =>
+                                  goToSelectedIngredients(e, ingredient.price)
+                                }
                               />
                               <label
                                 className="inline-block text-lg pl-[0.15rem] hover:cursor-pointer font-primary"

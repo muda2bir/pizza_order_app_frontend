@@ -11,7 +11,11 @@ export interface CartObj {
   pizza_name: string;
   cart_id: string;
   customer_id: string;
-  ingredients: number[];
+  ingredients: {
+    name: string;
+    price: number;
+  }[];
+  total_price: number;
 }
 
 export default function CartPage() {
@@ -37,7 +41,6 @@ export default function CartPage() {
       }
       setCart(data.cart); // setting the cart to make that use in the loop
     } catch (err) {
-      console.log(err);
       toast.error("Something went wrong!");
       navigate("/");
     }
@@ -114,14 +117,14 @@ export default function CartPage() {
 
                   <div className="ml-4 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+                      <div className="flex justify-between text-sm font-medium text-gray-900">
                         <h3>
                           <a href="#">{item.pizza_name}</a>
                         </h3>
-                        <p className="ml-4">₹45.66</p>
+                        <p className="ml-4">₹{item.total_price}</p>
                       </div>
                       <p className="mt-1 text-sm text-gray-500">
-                        {item.ingredients.join(", ").slice(0, 47)}....
+                        {item.ingredients.join(", ").slice(0, 35)}....
                       </p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
