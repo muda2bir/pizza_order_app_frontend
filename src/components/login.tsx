@@ -84,13 +84,13 @@ export default function Login() {
     <form className="bg-white rounded mb-4" onSubmit={formik.handleSubmit}>
       <div className="mb-4">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="username"
         >
           Your email
         </label>
         <input
-          className={`shadow appearance-none border ${
+          className={`shadow font-primary appearance-none border ${
             formik.touched.email && formik.errors.email ? "border-red-500" : ""
           } rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id="email"
@@ -105,13 +105,13 @@ export default function Login() {
       </div>
       <div className="mb-6">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="password"
         >
           Password
         </label>
         <input
-          className={`shadow appearance-none border ${
+          className={`shadow font-primary appearance-none border ${
             formik.touched.password && formik.errors.password
               ? "border-red-500"
               : ""
@@ -130,14 +130,14 @@ export default function Login() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
+          className={`bg-[#FC5D3D] font-primary hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
             formik.isSubmitting ? "cursor-not-allowed" : ""
           }`}
           type="submit"
           disabled={formik.isSubmitting}
         >
           {formik.isSubmitting ? (
-            <div className="flex items-center gap-2 justify-center">
+            <div className="flex items-center gap-2 font-primary justify-center">
               <img src={btnLoader} alt="loading.." className="h-6" /> Loading...
             </div>
           ) : (

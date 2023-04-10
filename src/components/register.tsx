@@ -44,13 +44,13 @@ export default function Register() {
     <form className="bg-white rounded  mb-4" onSubmit={formik.handleSubmit}>
       <div className="mb-4">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="name"
         >
           Your name
         </label>
         <input
-          className="shadow appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow font-primary appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="name"
           type="text"
           placeholder="Rakesh Kumar"
@@ -60,13 +60,13 @@ export default function Register() {
       </div>
       <div className="mb-4">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="email"
         >
           Your email
         </label>
         <input
-          className="shadow appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow font-primary appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="email"
           type="email"
           placeholder="name@mail.com"
@@ -76,13 +76,13 @@ export default function Register() {
       </div>
       <div className="mb-6">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="password"
         >
           Password
         </label>
         <input
-          className={`shadow appearance-none border ${
+          className={`shadow font-primary appearance-none border ${
             formik.touched.password && formik.errors.password
               ? "border-red-500"
               : ""
@@ -101,13 +101,13 @@ export default function Register() {
       </div>
       <div className="mb-6">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mb-2 font-primary"
           htmlFor="cpassword"
         >
           Confirm Password
         </label>
         <input
-          className={`shadow appearance-none border ${
+          className={`shadow font-primary appearance-none border ${
             formik.touched.cpassword && formik.errors.cpassword
               ? "border-red-500"
               : ""
@@ -126,7 +126,7 @@ export default function Register() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className={`bg-[#FC5D3D] hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
+          className={`bg-[#FC5D3D] font-primary hover:bg-[#FC823D] text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline ${
             formik.isSubmitting ? "cursor-not-allowed" : ""
           }`}
           type="submit"
