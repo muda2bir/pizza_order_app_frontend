@@ -11,6 +11,7 @@ import RegisterPage from "./pages/register_page";
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -19,7 +20,6 @@ function App() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-      <ToastContainer />
     </div>
   );
 }
