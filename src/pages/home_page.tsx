@@ -17,7 +17,6 @@ type IngredientType = {
 };
 
 export default function HomePage() {
-  console.log(import.meta.env.VITE_SERVER_URL);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userAuthenticated = useAppSelector(
